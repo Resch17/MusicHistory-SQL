@@ -30,15 +30,16 @@ FROM Song s
 -- 9 -- INSERT INTO Song (Title, SongLength, ReleaseDate, GenreId, ArtistId, AlbumId) VALUES ('Motion Sickness', 229, '09/22/2017', 1, 29, 24);
 -- INSERT INTO Song (Title, SongLength, ReleaseDate, GenreId, ArtistId, AlbumId) VALUES ('Smoke Signals', 324, '09/22/2017', 1, 29, 24);
 
-/* 10 -- SELECT al.Title, s.Title, a.ArtistName FROM Artist a 
+/* -- 10 -- SELECT al.Title, s.Title, a.ArtistName FROM Artist a 
 	LEFT JOIN Album al on al.ArtistId = a.id
 	LEFT JOIN Song s on s.AlbumId = al.Id
 	WHERE a.id = 29;
 */
 
-/* 11 -- SELECT COUNT(s.Id), a.ArtistName, al.Title
-	FROM Song s LEFT JOIN Album al on s.AlbumId = al.Id
-	LEFT JOIN Artist a on a.Id = al.ArtistId
+/* --11 --SELECT COUNT(s.Id) as SongCount, a.ArtistName, al.Title
+	FROM Song s 
+		LEFT JOIN Album al on s.AlbumId = al.Id
+		LEFT JOIN Artist a on a.Id = al.ArtistId
 	GROUP BY al.Title, a.ArtistName;
 */
 
@@ -52,9 +53,12 @@ FROM Song s
 	GROUP BY g.Label;
 */
 
-/* 14 -- SELECT a.ArtistName from Artist a LEFT JOIN Album al on al.ArtistId = a.Id
-	GROUP BY al.Label, a.ArtistName
-	HAVING COUNT(al.Label) > 1;
+/* 14 -- 
+SELECT COUNT(distinct al.Label) as LabelsReleasedOn, a.ArtistName
+	FROM Artist a 
+		LEFT JOIN Album al on al.ArtistId = a.Id
+	GROUP BY a.ArtistName
+	HAVING COUNT(distinct al.Label) > 1;
 */
 
 /* 15 -- SELECT Title, AlbumLength FROM Album
@@ -62,6 +66,12 @@ FROM Song s
 */
 
 -- 16
+/*
+*/
 SELECT s.Title as SongTitle, s.SongLength, al.Title as AlbumTitle 
 	FROM Song s INNER JOIN Album al on s.AlbumId = al.Id
 	WHERE SongLength = (SELECT MAX(SongLength) FROM Song);
+
+SELECT top 1 Title, SongLength
+	FROM Song
+	ORDER BY SongLength desc;
